@@ -15,3 +15,16 @@ The pipeline consists of the following steps:
 - feature_engineering: The function uses a OnehotEncoder to transform the location column
 - create_model: Creates a linear regression to predict the pedestrian count for the next hour based only on the location (leading to the mean of the training data)
 - evaluate: Evaluate the created model by calculating the mean absolute value.
+
+## Installation Instructions
+
+### Prerequisites
+
+- Python 3.8 or higher
+
+### Steps
+
+1. Install Python packages:
+    ```sh
+    pip install -r requirements.txt
+    ```

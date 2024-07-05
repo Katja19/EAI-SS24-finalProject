@@ -22,6 +22,9 @@ The pipeline consists of the following steps:
 
 - Python 3.8 or higher
 
+### Description
+
+
 ### Steps
 
 1. Install Python packages:

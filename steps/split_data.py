@@ -20,6 +20,7 @@ def split_data(dataset:pd.DataFrame, label: str) -> Tuple[
     and testing sets.
     """
     X = dataset.drop(label,axis=1)
+    
     Y = dataset[label]
     X_train,X_test,y_train,y_test = train_test_split(X,Y,test_size=0.2,shuffle=False)
     return X_train,X_test,y_train,y_test

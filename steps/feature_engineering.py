@@ -18,6 +18,11 @@ def feature_engineering(X_train: pd.DataFrame,X_test:pd.DataFrame)-> Tuple[Annot
     Returns:
     Tuple[Annotated[pd.DataFrame, "X_train"], Annotated[pd.DataFrame, "X_test"]]: A tuple containing the encoded training and testing data.
     """
+    
+    print("Data in feaure engenierien:")
+    print(X_train.head())
+    
+    
     encoder = OneHotEncoder(sparse_output=False)
     encoded_train_values = pd.DataFrame(encoder.fit_transform(X_train[["location_name"]]), index=X_train.index, columns=encoder.get_feature_names_out())
     encoded_test_values = pd.DataFrame(encoder.transform(X_test[["location_name"]]), index=X_test.index, columns=encoder.get_feature_names_out())

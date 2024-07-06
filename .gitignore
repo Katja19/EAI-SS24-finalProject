@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# own files
+test_katja.ipynb
+
 # C extensions
 *.so
 

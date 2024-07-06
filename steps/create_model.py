@@ -22,6 +22,6 @@ def create_model(X_train: pd.DataFrame, y_train: pd.Series) -> Tuple[Annotated[R
     Tuple[Annotated[RegressorMixin, "model"], Annotated[float, "mae_in_sample"]]: A tuple containing the trained model and the mean absolute error (MAE) in the training data.
     """
     model = LinearRegression()
-    model.fit(X_train, y_train)
+    model.fit(X_train, y_train) # Train the model
     mae_in_sample = mean_absolute_error(y_train, model.predict(X_train))
     return model, mae_in_sample

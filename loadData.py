@@ -6,4 +6,3 @@ weather=imf.handleImportOfWeatherData()
 def load_Data():
     results=wdh.weatherHandling(data1, weather)
     return results
-#print(load_Data())

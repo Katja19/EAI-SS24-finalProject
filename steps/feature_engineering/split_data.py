@@ -1,3 +1,5 @@
+# fertig
+
 import pandas as pd
 from zenml import step
 from typing_extensions import Annotated
@@ -18,9 +20,14 @@ def split_data(dataset:pd.DataFrame, label: str) -> Tuple[
     divides the data into training and testing subsets. The splitting process does
     not shuffle the data, which preserves the original ordering in the training
     and testing sets.
+    We save the raw data (X_train, X_test, y_train, y_test) to the cache of zenml.
     """
-    X = dataset.drop(label,axis=1)
     
-    Y = dataset[label]
-    X_train,X_test,y_train,y_test = train_test_split(X,Y,test_size=0.2,shuffle=False)
+    # 1. Split the data into features X and target(=label) y
+    X = dataset.drop(label,axis=1)
+    y = dataset[label]
+    
+    # 2. Split the data into training and testing sets, without shuffling the data and with a test size of 20%
+    X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2,shuffle=False)
+    
     return X_train,X_test,y_train,y_test

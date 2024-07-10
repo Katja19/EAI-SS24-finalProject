@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime, timedelta, timezone
+import pandas as pd
 
 # Funktion, um das Datum im gewünschten Format zu erstellen
 def format_date_with_timezone(dt):
@@ -24,10 +25,14 @@ with open('feiertage.csv', mode='r', encoding='utf-8') as file:
         datum = row['datum'].split('T')[0]  # Datum kürzen auf das Format %Y-%m-%d
         feiertage_set.add(datum)
 
+# Events aus der Excel-Datei einlesen
+events_df = pd.read_excel('Events_wuerzburg.xlsx')
+events_set = set(events_df['datum'].dt.strftime('%Y-%m-%d'))
+
 # Temporäre CSV-Datei erstellen
 temp_file = 'kalendertage_temp.csv'
 with open(temp_file, mode='w', newline='', encoding='utf-8') as file:
-    fieldnames = ['datum', 'feiertag', 'werktag', 'gruner_markt', 'spezialitaten_markt']
+    fieldnames = ['datum', 'feiertag', 'werktag', 'gruner_markt', 'spezialitaten_markt', 'event']
     writer = csv.DictWriter(file, fieldnames=fieldnames)
     writer.writeheader()
     
@@ -42,19 +47,23 @@ with open(temp_file, mode='w', newline='', encoding='utf-8') as file:
         # Spezialitätenmarkt Tage: Dienstag, Mittwoch, Freitag, Samstag
         spezialitaten_markt = 1 if day.weekday() in [1, 2, 4, 5] else 0
 
+        # Event Tage
+        event = 1 if datum_str in events_set else 0
+
         writer.writerow({
             'datum': datum_str,
             'feiertag': feiertag,
             'werktag': werktag,
             'gruner_markt': gruner_markt,
-            'spezialitaten_markt': spezialitaten_markt
+            'spezialitaten_markt': spezialitaten_markt,
+            'event': event
         })
 
 # Schritt 2: Finale CSV-Datei mit dem gewünschten Datumsformat erstellen
 final_file = 'kalendertage_2024.csv'
 with open(temp_file, mode='r', encoding='utf-8') as infile, open(final_file, mode='w', newline='', encoding='utf-8') as outfile:
     reader = csv.DictReader(infile)
-    fieldnames = ['datum', 'feiertag', 'werktag', 'gruner_markt', 'spezialitaten_markt']
+    fieldnames = ['datum', 'feiertag', 'werktag', 'gruner_markt', 'spezialitaten_markt', 'event']
     writer = csv.DictWriter(outfile, fieldnames=fieldnames)
     writer.writeheader()
     
@@ -67,7 +76,8 @@ with open(temp_file, mode='r', encoding='utf-8') as infile, open(final_file, mod
             'feiertag': row['feiertag'],
             'werktag': row['werktag'],
             'gruner_markt': row['gruner_markt'],
-            'spezialitaten_markt': row['spezialitaten_markt']
+            'spezialitaten_markt': row['spezialitaten_markt'],
+            'event': row['event']
         })
 
 print("Die Tabelle mit allen Kalendertagen für 2024 wurde erfolgreich erstellt.")

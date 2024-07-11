@@ -22,22 +22,26 @@ def load_data() -> pd.DataFrame:
     # we only need the location_id, pedestrians_count and timestamp cause the other columns have missing values or not needed
     wue_data = pd.read_sql('SELECT location_id, pedestrians_count, timestamp FROM data ORDER BY timestamp', connection)
     wue_data['date'] = wue_data['timestamp'].str.extract(r'(\d{4}-\d{2}-\d{2})')
+    wue_data['datetime'] = wue_data['timestamp'].str.split('+').str[0]
     
     # 3. Load the weather data from the 'weather' table
-    #weather_data = pd.read_sql('SELECT * FROM weather ORDER BY timestamp', connection)
+    weather_data = pd.read_sql('SELECT datetime, temp, humidity, precip FROM weather ORDER BY datetime', connection)
     
     # 4. Load the event data from the 'events' table
     event_data = pd.read_sql('SELECT * FROM events ORDER BY date', connection)
     
     # 5. Merge the data on the timestamp column
     data = pd.merge(wue_data, event_data, on='date', how='left')
+    data = pd.merge(data, weather_data, on='datetime', how='left')
     data.sort_values(by=['timestamp', 'location_id'], inplace=True)
+    
+    # noch kein dropen der Spalten, da wir diese noch beim nächsten Schritt benötigen
     
     # 6. Close the database connection
     connection.close()
     
-    #print(data.head())
-    #print(data.columns)
+    print(data.head())
+    print(data.columns)
 
     return data
     

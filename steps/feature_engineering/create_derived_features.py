@@ -42,14 +42,17 @@ def create_derived_features(dataset:pd.DataFrame, lags:int) -> Annotated[pd.Data
     dataset['year'] = dataset['timestamp'].str.extract(r'(\d{4})').astype(int)
     dataset['month'] = dataset['timestamp'].str.extract(r'-(\d{2})-').astype(int)
     dataset['day'] = dataset['timestamp'].str.extract(r'-(\d{2})T').astype(int)
+    
+    
     dataset['hour'] = dataset['timestamp'].str.extract(r'T(\d{2})').astype(int)
+    
+    
+    
     dataset['weekday'] = pd.to_datetime(dataset['date']).dt.day_name() # soll später one hot encoded werden
     
     # need to drop the timestamp column, cause we dont need it anymore and it cant be fit_transformed by the pipeline
     dataset.drop('timestamp', axis=1, inplace=True)
     dataset.drop('date', axis=1, inplace=True)
-    
-    
     
     #print("Derived features created inside the pipeline.")
     # print(dataset.head())

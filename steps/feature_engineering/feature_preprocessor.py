@@ -28,5 +28,11 @@ def feature_preprocessor(pipeline:Pipeline,X_train:pd.DataFrame,X_test:pd.DataFr
     X_train_preprocessed = pd.DataFrame(X_train_transformed,columns=all_features)
     X_test_preprocessed = pd.DataFrame(X_test_transformed,columns=all_features)
     
+    print("Feature preprocessed X:")
+    print(X_train_preprocessed.head())
+    print(X_train.dtypes)
+    print(X_test_preprocessed.head())
+    print(X_test.dtypes)
+    
     return X_train_preprocessed,X_test_preprocessed,pipeline
     

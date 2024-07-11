@@ -16,6 +16,8 @@ def update_data():
     with the updated dataset. Finally, it commits the changes and closes the database connection.
     """
     
+    print("We are inside the update_data step.")
+    
     # 1. Connect to the SQLite database
     connection = sqlite3.connect('data.db')
     
@@ -46,14 +48,6 @@ def update_data():
     # 3.3 Attempt to read the existing weather data from the 'weather' table, create an empty DataFrame
     # 3.4 Merge the existing weather data with the updated weather dataset and remove duplicates
     # 3.5 Replace the existing weather data in the 'weather' table with the merged weather dataset
-    
-    # TODO: Ungefähr so könnte der Code aussehen, um die Feitagdaten zu aktualisieren
-    # 4. historical traffic data for Wuerzburg
-    # 4.1 Retrieve the latest traffic data from the specified URL
-    # 4.2 Remove unnecessary columns from the traffic dataset
-    # 4.3 Attempt to read the existing traffic data from the 'traffic' table, create an empty DataFrame
-    # 4.4 Merge the existing traffic data with the updated traffic dataset and remove duplicates
-    # 4.5 Replace the existing traffic data in the 'traffic' table with the merged traffic dataset
     
     # 5. Commit the changes and close the database connection
     connection.commit()

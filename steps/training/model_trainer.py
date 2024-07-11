@@ -2,7 +2,7 @@ import pandas as pd
 import mlflow
 from zenml import step
 from typing_extensions import Annotated
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
 from typing import Tuple
 from sklearn.base import RegressorMixin
@@ -17,12 +17,12 @@ def model_trainer(X_train: pd.DataFrame, y_train: pd.Series, model_type: str, be
     mlflow.sklearn.autolog()
 
     # 2. Choose the model class based on the model_type
-    if model_type == 'decision_tree':
-        model = DecisionTreeRegressor(**best_parameters)
+    if model_type == 'random_forest':
+        model = RandomForestRegressor(**best_parameters)
     elif model_type == 'xgboost':
         model = XGBRegressor(**best_parameters)
     else:
-        raise ValueError("Unsupported model_type. Supported types: 'decision_tree', 'xgboost'")
+        raise ValueError("Unsupported model_type. Supported types: 'random_forest', 'xgboost'")
 
     # 3. Train the model
     model.fit(X_train, y_train)

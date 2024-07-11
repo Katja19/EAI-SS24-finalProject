@@ -22,6 +22,8 @@ def split_data(dataset:pd.DataFrame, label: str) -> Tuple[
     and testing sets.
     We save the raw data (X_train, X_test, y_train, y_test) to the cache of zenml.
     """
+    #print("We are inside the split_data step.")
+    
     
     # 1. Split the data into features X and target(=label) y
     X = dataset.drop(label,axis=1)
@@ -29,5 +31,19 @@ def split_data(dataset:pd.DataFrame, label: str) -> Tuple[
     
     # 2. Split the data into training and testing sets, without shuffling the data and with a test size of 20%
     X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2,shuffle=False)
+    # print the shapes of the training and testing data
+    # print("Shapes of the training and testing data:")
+    # print(dataset.shape)
+    # print(X_train.dtypes)
+    # print(X_train.shape)
+    # print(X_test.dtypes)
+    # print(X_test.shape)
+    # print(y_train.dtypes)
+    # print(y_train.shape)
+    # print(y_test.dtypes)
+    # print(y_test.shape)
+
+    
+    
     
     return X_train,X_test,y_train,y_test

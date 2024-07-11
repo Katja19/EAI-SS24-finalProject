@@ -25,10 +25,17 @@ def create_preprocessing_pipeline(dataset:pd.DataFrame,target:str) -> Pipeline:
         Pipeline: _description_
     """
     
+    print("Inside the create_preprocessing_pipeline step.")
+    print("The target column is: ", target)
+    print("The dataset columns are: ", dataset.columns)
+    
     # 1. Define the numerical and categorical columns excluding the target column
     cat_columns = dataset.select_dtypes(include=['object']).columns
-    cat_columns = cat_columns.drop(target)
+    print("Categorical columns: ", cat_columns)
+    
     num_columns = dataset.select_dtypes(exclude=['object']).columns
+    print("Numerical columns: ", num_columns)
+    num_columns = num_columns.drop(target)
         
     # 2. Define the numerical pipeline with SimpleImputer for missing values and StandardScaler for scaling
     num_pipeline = Pipeline([
@@ -52,5 +59,6 @@ def create_preprocessing_pipeline(dataset:pd.DataFrame,target:str) -> Pipeline:
     prepro_pipeline = Pipeline([
         ('preprocessing', preprocessing)
     ])
+    
         
     return prepro_pipeline

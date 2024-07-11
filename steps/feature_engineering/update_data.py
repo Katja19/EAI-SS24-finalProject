@@ -43,7 +43,12 @@ def update_data():
     
     # TODO: Ungefähr so könnte der Code aussehen, um die Wetterdaten zu aktualisieren
     # 3. historical weather data for Wuerzburg
-    # 3.1 Retrieve the latest weather data from the specified URL
+    # 3.1 Retrieve the latest weather data from the specified URL based on the last timestamp in the 'weather' table
+     
+    # get the weather data from the last timestamp in the 'weather' table
+    weather_data_temp = pd.read_sql('SELECT * FROM weather ORDER BY timestamp DESC LIMIT 1', connection)
+    
+    
     # 3.2 Remove unnecessary columns from the weather dataset
     # 3.3 Attempt to read the existing weather data from the 'weather' table, create an empty DataFrame
     # 3.4 Merge the existing weather data with the updated weather dataset and remove duplicates
@@ -52,3 +57,7 @@ def update_data():
     # 5. Commit the changes and close the database connection
     connection.commit()
     connection.close()
+    
+    
+    
+    def weather_data_update()

@@ -39,8 +39,19 @@ def update_data():
     except:
         existing_data = pd.DataFrame(columns=["location_name", "pedestrians_count", "temperature"])
     
+    print(len(existing_data))
+    
     # 2.4 Merge the existing data with the updated dataset and remove duplicates
     merged_data = pd.concat([existing_data, dataset]).drop_duplicates().reset_index(drop=True)
+    
+    print(len(merged_data))
+    
+    # get the latest timestamp from merged_data
+    latest_timestamp_wue = merged_data['timestamp'].max()
+    
+    # strip the latest_timestamp_wue with str.split('+').str[0]
+    latest_datetime_wue = latest_timestamp_wue.split('+')[0]
+    print("latest_datetime_wue: ", latest_datetime_wue)
     
     # 2.5 Replace the existing data in the 'data' table with the merged dataset
     merged_data.to_sql('data', connection, if_exists='replace', index=False)
@@ -76,7 +87,7 @@ def update_data():
     if response.status_code == 200:
         # Read the response as a DataFrame
         weather_data = pd.read_csv(io.StringIO(response.text))
-        print(weather_data.head())
+        #print(weather_data.head())
         print(weather_data.shape)
         
         # save the weather data to the 'weather' table
@@ -84,12 +95,16 @@ def update_data():
             existing_weather_data = pd.read_sql('SELECT * FROM weather', connection)
         except:
             existing_weather_data = pd.DataFrame(columns=weather_data.columns)
+            
+        print(len(existing_weather_data))
         
         # Filter the weather data to get only the rows that are between the latest date and the current date both excluded
-        weather_data = weather_data[(weather_data['datetime'] > latest_daytime) & (weather_data['datetime'] < current_datetime_rounded)]
+        weather_data = weather_data[(weather_data['datetime'] > latest_daytime) & (weather_data['datetime'] <= latest_datetime_wue)]
         
         # Merge the existing weather data with the updated dataset and remove duplicates
         merged_weather_data = pd.concat([existing_weather_data, weather_data]).drop_duplicates().reset_index(drop=True) # if duplicates are found, the first occurrence is kept
+        
+        print(len(merged_weather_data))
         
         # Replace the existing weather data in the 'weather' table with the merged dataset
         merged_weather_data.to_sql('weather', connection, if_exists='replace', index=False)

@@ -31,8 +31,8 @@ def feature_engineering_pipeline():
 
     # # 2. load the data (including the weather and traffic data the end)
     dataset = load_data()
-    print("Data loaded.")
-    print(type(dataset))
+    #print("Data loaded.")
+    #print(type(dataset))
 
     # #2.5 create derived features, we will loose the first num_lags rows
     dataset = create_derived_features(dataset, lags=5)

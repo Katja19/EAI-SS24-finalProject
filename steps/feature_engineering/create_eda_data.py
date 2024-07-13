@@ -42,5 +42,5 @@ def create_eda_data(X_train:pd.DataFrame,X_test:pd.DataFrame, y_train:pd.Series,
     print(f"eda_df shape: {eda_df.shape}")
     
     # Save to CSV
-    eda_df.to_csv("data/processed/edv_data.csv", index=False)
+    eda_df.to_csv("data/processed/eda_data.csv", index=False)
     print("EDA data saved successfully.")

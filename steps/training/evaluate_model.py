@@ -13,8 +13,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@step#(experiment_tracker="wandb_experiment_tracker")
-def evaluate_model(model:RegressorMixin,X_test:pd.DataFrame,y_test:pd.DataFrame):
+@step(experiment_tracker="wandb_experiment_tracker")
+def evaluate_model(model:RegressorMixin,X_test:pd.DataFrame,y_test:pd.DataFrame, model_variant:str, model_type:str, trials:int, 
+                   in_sample_rmse:float, best_parameters:dict) -> Annotated[bool, "Deployment Decision"]:
     """
     Evaluates the trained model and returns a deployment decision based on the out-of-sample accuracy.
     """
@@ -46,7 +47,27 @@ def evaluate_model(model:RegressorMixin,X_test:pd.DataFrame,y_test:pd.DataFrame)
     else:
         deploy = False
         
+    # 3. Log everything of the run to wandb
+    wandb.init(project="forcasting_model_multivariant", name=f"{model_variant}_{model_type}_{trials}_trials")
+    wandb.log({"model_variant": model_variant,
+                "model_type": model_type,
+                "trials": trials,
+                "in_sample_rmse": in_sample_rmse,
+                "rmse": rmse,
+                "mse": mse,
+                "r2": r2,
+                "mae": mae,
+                "deployment_decision": deploy})
+    
+    for key, value in best_parameters.items():
+        wandb.log({key: value})
+        
+    if deploy:
+        wandb.log({"model": model})
+        
     logger.info(f"Deployment decision: {deploy}")
     logger.info("Finished evaluate_model step.")
+    
+    wandb.finish()
         
     return deploy, rmse, mse, r2, mae

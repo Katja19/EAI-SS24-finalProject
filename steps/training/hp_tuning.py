@@ -97,4 +97,3 @@ def hp_tuning(X_train: pd.DataFrame, y_train: pd.Series, model_type: str = 'rand
     logger.info("Hp-Tuning step successfully completed.")
     
     return best_params
-  

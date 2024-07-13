@@ -29,12 +29,17 @@ def create_eda_data(X_train:pd.DataFrame,X_test:pd.DataFrame, y_train:pd.Series,
     X_test = X_test.reset_index(drop=True)
     y_train = y_train.reset_index(drop=True)
     y_test = y_test.reset_index(drop=True)
+    
+    X_train_eda = X_train.drop(["year", "month", "day", "hour"], axis=1)
+    X_test_eda = X_test.drop(["year", "month", "day", "hour"], axis=1)
+    X_train_eda = X_train_eda.reset_index(drop=True)
+    X_test_eda = X_test_eda.reset_index(drop=True)
     X_train_eda_date_infos = X_train_eda_date_infos.reset_index(drop=True)
     X_test_eda_date_infos = X_test_eda_date_infos.reset_index(drop=True)
     
     # Add the date information back to the dataframes
-    X_train = pd.concat([X_train, X_train_eda_date_infos], axis=1) 
-    X_test = pd.concat([X_test, X_test_eda_date_infos], axis=1)
+    X_train = pd.concat([X_train_eda, X_train_eda_date_infos], axis=1) 
+    X_test = pd.concat([X_test_eda, X_test_eda_date_infos], axis=1)
     
     print(f"X_train shape: {X_train.shape}")
     print(f"X_test shape: {X_test.shape}")

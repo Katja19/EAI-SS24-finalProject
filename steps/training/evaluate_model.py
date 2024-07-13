@@ -42,6 +42,10 @@ def evaluate_model(model:RegressorMixin,X_test:pd.DataFrame,y_test:pd.DataFrame,
     #logger.info(f"Metrics logged to wandb. RMSE: {rmse}")
     
     # 4. Make a deployment decision based on the out-of-sample rmse
+    # get the max_prededestrians value from the y_test data   
+    #TODO: get the max value from the y_test data
+    
+    
     if rmse < 10: # if the rmse is less than 10 persons of of the actual value, deploy the model
         deploy = True
     else:
@@ -51,7 +55,7 @@ def evaluate_model(model:RegressorMixin,X_test:pd.DataFrame,y_test:pd.DataFrame,
     wandb.init(project="forcasting_model_multivariant", name=f"{model_variant}_{model_type}_{trials}_trials")
     wandb.log({"model_variant": model_variant,
                 "model_type": model_type,
-                "trials": trials,
+                "trials": trials, 
                 "in_sample_rmse": in_sample_rmse,
                 "rmse": rmse,
                 "mse": mse,

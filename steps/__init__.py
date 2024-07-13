@@ -7,6 +7,7 @@ from .feature_engineering.create_derived_features import create_derived_features
 from .feature_engineering.split_data import split_data
 from .feature_engineering.create_preprocessing_pipeline import create_preprocessing_pipeline
 from .feature_engineering.feature_preprocessor import feature_preprocessor
+from .feature_engineering.create_eda_data import create_eda_data
 
 # from training folder
 from .training.hp_tuning import hp_tuning

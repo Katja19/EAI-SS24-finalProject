@@ -47,7 +47,7 @@ def objective(trial, model_class, X_train, y_train):
     return rmse
 
 @step
-def hp_tuning(X_train: pd.DataFrame, y_train: pd.Series, model_type: str = 'random_forest', trials: int = 25) -> Annotated[dict, "Best hyperparameters"]:
+def hp_tuning(X_train: pd.DataFrame, y_train: pd.Series, model_type: str = 'random_forest', trials: int = 5) -> Annotated[dict, "Best hyperparameters"]:
     """
     Diese Funktion optimiert die Hyperparameter eines Modells mit Optuna.
     """

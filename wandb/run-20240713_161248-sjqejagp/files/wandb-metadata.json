@@ -1,0 +1,49 @@
+{
+    "os": "Linux-6.5.0-1022-azure-x86_64-with-glibc2.31",
+    "python": "3.10.13",
+    "heartbeatAt": "2024-07-13T16:12:48.963315",
+    "startedAt": "2024-07-13T16:12:48.436897",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "<python with no main file>",
+    "codePathLocal": null,
+    "git": {
+        "remote": "https://github.com/Katja19/EAI-SS24-finalProject",
+        "commit": "12f544d61f46f340631db7ab0849476a604eb2c3"
+    },
+    "email": "m.baals@googlemail.com",
+    "root": "/workspaces/EAI-SS24-finalProject",
+    "host": "codespaces-a04e2f",
+    "username": "codespace",
+    "executable": "/workspaces/EAI-SS24-finalProject/.venv/bin/python",
+    "cpu_count": 1,
+    "cpu_count_logical": 2,
+    "cpu_freq": {
+        "current": 3242.9415,
+        "min": 0.0,
+        "max": 0.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3244.526,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3241.357,
+            "min": 0.0,
+            "max": 0.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 31.32598876953125,
+            "used": 12.090827941894531
+        }
+    },
+    "memory": {
+        "total": 7.743705749511719
+    }
+}

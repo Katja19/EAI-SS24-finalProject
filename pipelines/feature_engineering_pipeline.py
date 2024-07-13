@@ -1,6 +1,8 @@
 from steps import update_data, load_data, split_data, create_derived_features, create_preprocessing_pipeline, feature_preprocessor
 from zenml import pipeline
 
+import logging
+
 """
     This pipeline will update the data and will perform feature engineering on the data.
     We will also need feature engineering during the inference later on.
@@ -10,14 +12,21 @@ from zenml import pipeline
     - the prepro_pipeline, which is the pipeline that was used to preprocess the data
 """
 
+# Set up basic logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
 # The cache is used to store the data and the results of the steps, so we dont set: @pipeline#(enable_cache=False)
 @pipeline
 def feature_engineering_pipeline():
     """
         Pipeline to update the data and perform feature engineering on the data.
     """
+    logger.info("Starting feature engineering pipeline...")
     
-    print("We are inside the feature engineering pipeline.")
+    
+    #print("We are inside the feature engineering pipeline.")
     # 0. ensure the execution order of the steps
     load_data.after(update_data)
     create_derived_features.after(load_data)
@@ -27,7 +36,8 @@ def feature_engineering_pipeline():
     
     # 1. update the data
     update_data()
-    print(f"Data updated.")
+    logger.info("Data updated.")
+    #print(f"Data updated.")
 
     # # 2. load the data (including the weather and traffic data the end)
     dataset = load_data()
@@ -54,4 +64,8 @@ def feature_engineering_pipeline():
     
     # #print("Feature engineering completed.")
     # #print(type(X_train)) # <class 'zenml.steps.entrypoint_function_utils.StepArtifact'>
-    # #print(type(X_test))   
+    # #print(type(X_test))  
+    
+    logger.info("Feature engineering pipeline successfully completed.")
+    
+    

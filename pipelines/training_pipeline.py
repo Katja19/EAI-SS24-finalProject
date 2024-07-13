@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@pipeline(enable_cache=False)
+@pipeline#(experiment_tracker="wandb_experiment_tracker")
 def training_pipeline(model_variant:str, model_type:str):
     """ 
         Pipeline to train and deploy a machine learning model using preprocessed and encoded datasets.
@@ -36,7 +36,7 @@ def training_pipeline(model_variant:str, model_type:str):
         y_test = client.get_artifact_version("y_test") # not encoded cause it is a regression problem
         
         # 2. Get the best hyperparameters for the model
-        trials = 10
+        trials = 5
         best_parameters = hp_tuning(X_train,y_train,model_type, trials=trials)
         
         # 3. Train the model and get the in-sample score (RMSE)

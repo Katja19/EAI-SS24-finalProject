@@ -13,8 +13,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@step(experiment_tracker="wandb_experiment_tracker")
-def evaluate_model(model:RegressorMixin,X_test:pd.DataFrame,y_test:pd.DataFrame) -> Annotated[bool,"deployment_decision"]:
+@step#(experiment_tracker="wandb_experiment_tracker")
+def evaluate_model(model:RegressorMixin,X_test:pd.DataFrame,y_test:pd.DataFrame):
     """
     Evaluates the trained model and returns a deployment decision based on the out-of-sample accuracy.
     """
@@ -37,8 +37,8 @@ def evaluate_model(model:RegressorMixin,X_test:pd.DataFrame,y_test:pd.DataFrame)
     # mlflow.log_metric("mae", mae)
     
     # 3. Log the metrics to wandb
-    wandb.log({"mse": mse, "rmse": rmse, "r2": r2, "mae": mae})
-    logger.info(f"Metrics logged to wandb. RMSE: {rmse}")
+    #wandb.log({"mse": mse, "rmse": rmse, "r2": r2, "mae": mae})
+    #logger.info(f"Metrics logged to wandb. RMSE: {rmse}")
     
     # 4. Make a deployment decision based on the out-of-sample rmse
     if rmse < 10: # if the rmse is less than 10 persons of of the actual value, deploy the model

@@ -1,49 +1,37 @@
-# from pipelines.training_pipeline import training_pipeline
-# from pipelines.feature_engineering_pipeline import feature_engineering_pipeline
-# from pipelines.inference_pipeline import inference_pipeline
-
-# if __name__ == "__main__":
-    
-#     # this pipeline saves the raw data (X_train, X_test, y_train, y_test, input_data)
-#     # but also the preprocessed data (X_train_preprocessed, X_test_preprocessed, y_train_encoded, y_test_encoded)
-#     # but also the prepro_pipeline, which is the pipeline that was used to preprocess the data
-#     feature_engineering_pipeline()
-    
-#     # TODO
-#     training_pipeline()
-    
-#     # TODO
-#     inference_pipeline()
-      
-import argparse
 from pipelines.training_pipeline import training_pipeline
 from pipelines.feature_engineering_pipeline import feature_engineering_pipeline
-from pipelines.inference_pipeline import inference_pipeline
+#from pipelines.inference_pipeline import inference_pipeline
+import logging
+import wandb
 
-def main(model_variant, model_type):
+# Set up basic logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+def run_pipelines(model_variant, model_type):
     
     # Execute the feature engineering pipeline
     # Result: 
     # X_train, X_test, y_train, y_test, input_data, 
     # X_train_preprocessed, X_test_preprocessed, y_train,n y_test, pipeline are saved as artifacts
-    #feature_engineering_pipeline(model_variant=model_variant, model_type=model_type)
+    logger.info("Starting the feature engineering pipeline.")
     feature_engineering_pipeline()
+    logger.info("Feature engineering pipeline completed.")
     
     # Execute the training pipeline
     # Result: 
     # deoployed model, best hyperparameters, in-sample RMSE and deployment decision are saved as artifacts
-    training_pipeline(model_variant=model_variant, model_type=model_type)
+    logger.info("Starting the training pipeline.")
     
-    # Execute the inference pipeline
-    #inference_pipeline(model_variant=model_variant, model_type=model_type)
-    inference_pipeline()
+    # Initialize wandb run for logging the training pipeline results, it is initialized here because 
+    # we want to log the results of the training pipeline to a new run but in the same project
+    #wandb.init(project="forcasting_model_multivariant", name="default_run_name")
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Execute pipelines with model parameters')
-    parser.add_argument('--model_variant', type=str, choices=['multi', 'uni'], default='multi',
-                        help='Model variant ("multi" or "uni")')
-    parser.add_argument('--model_type', type=str, choices=['xgb', 'arima'], default='xgb',
-                        help='Model type ("xgb" or "arima")')
     
-    args = parser.parse_args()
-    main(args.model_variant, args.model_type)
+    training_pipeline(model_variant=model_variant, model_type=model_type)
+    logger.info("Training pipeline completed.")
+    
+    # Execute the inference pipeline # wird in der main seperat später ausgeführt
+    #inference_pipeline(model_variant=model_variant, model_type=model_type)
+    #inference_pipeline()

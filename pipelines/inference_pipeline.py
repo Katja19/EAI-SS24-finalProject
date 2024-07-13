@@ -8,9 +8,13 @@ def inference_pipeline():
     Runs the inference pipeline to predict the target variable of the inference data
     """
     
-    # 1. Load the inference data, these are the data points for which we want to predict the target variable
+    # 1 Update_data
+    
+    
+    
+    #ALT 1. Load the inference data, these are the data points for which we want to predict the target variable
     # In our case: The next 24 hours of the time series = the next day
-    data = inference_data_loader("./data/inference.csv")
+    #data = inference_data_loader("./data/inference.csv")
     
     # 2. Get the preprocessing pipeline from the training pipeline
     client = Client()

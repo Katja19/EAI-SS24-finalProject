@@ -1,0 +1,52 @@
+{
+    "os": "Windows-10-10.0.22631-SP0",
+    "python": "3.11.3",
+    "heartbeatAt": "2024-07-13T13:44:25.524717",
+    "startedAt": "2024-07-13T13:44:24.638780",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "<python with no main file>",
+    "codePathLocal": null,
+    "git": {
+        "remote": "https://github.com/Katja19/EAI-SS24-finalProject.git",
+        "commit": "0b0c488ec78634e3eed944e819625cd763dc1907"
+    },
+    "email": "katja.gegg@gmail.com",
+    "root": "C:/Users/User/VSCProjects/EAI_SS24/EAI-SS24-finalProject",
+    "host": "XPS-15-9520-KG",
+    "username": "User",
+    "executable": "c:\\Program Files\\Python311\\python.exe",
+    "cpu_count": 14,
+    "cpu_count_logical": 20,
+    "cpu_freq": {
+        "current": 2300.0,
+        "min": 0.0,
+        "max": 2300.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2300.0,
+            "min": 0.0,
+            "max": 2300.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 952.8642539978027,
+            "used": 363.72375106811523
+        }
+    },
+    "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+            "memory_total": 4294967296
+        }
+    ],
+    "memory": {
+        "total": 31.67876434326172
+    }
+}

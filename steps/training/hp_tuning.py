@@ -30,8 +30,8 @@ def objective(trial, model_class, X_train, y_train):
         params['n_estimators'] = trial.suggest_int('n_estimators', 50, 200)
         params['max_depth'] = trial.suggest_int('max_depth', 1, 10)
         params['learning_rate'] = trial.suggest_float('learning_rate', 0.01, 0.3)
-        params['subsample'] = trial.suggest_float('subsample', 0.6, 0.95, 0.05)
-        params['colsample_bytree'] = trial.suggest_float('colsample_bytree', 0.6, 0.95, 0.05)
+        params['subsample'] = trial.suggest_float('subsample', 0.6, 0.95)#, 0.05)
+        params['colsample_bytree'] = trial.suggest_float('colsample_bytree', 0.6, 0.95)#, 0.05)
         model = model_class(**params, random_state=42)
     
     # 2. Split the data into training and validation data
@@ -47,7 +47,7 @@ def objective(trial, model_class, X_train, y_train):
     return rmse
 
 @step
-def hp_tuning(X_train: pd.DataFrame, y_train: pd.Series, model_type: str = 'random_forest', trials: int = 25) -> Annotated[dict, "Best hyperparameters"]:
+def hp_tuning(X_train: pd.DataFrame, y_train: pd.Series, model_type: str = 'random_forest', trials: int = 5) -> Annotated[dict, "Best hyperparameters"]:
     """
     Diese Funktion optimiert die Hyperparameter eines Modells mit Optuna.
     """

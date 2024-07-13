@@ -23,6 +23,8 @@ def feature_preprocessor(pipeline:Pipeline,X_train:pd.DataFrame,X_test:pd.DataFr
     
     try:
         
+
+        
         # 1. Fit the pipeline on the training data to learn the necessary transformations and transform the training data and the test data
         X_train_transformed = pipeline.fit_transform(X_train)
         X_test_transformed = pipeline.transform(X_test)
@@ -46,7 +48,7 @@ def feature_preprocessor(pipeline:Pipeline,X_train:pd.DataFrame,X_test:pd.DataFr
         
         logger.info("Feature preprocessor step successfully completed.")
         
-        return X_train_preprocessed,X_test_preprocessed,pipeline
+        return X_train_preprocessed,X_test_preprocessed,pipeline, 
     
     except Exception as e:
         logger.error("Error in feature_preprocessor step: ", e)

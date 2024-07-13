@@ -116,7 +116,6 @@ def update_data():
         else:
             print(f"Failed to retrieve weather data. Status code: {response.status_code}")
 
-
         # 4. Commit the changes and close the database connection
         connection.commit()
         connection.close()

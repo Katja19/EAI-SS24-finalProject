@@ -51,7 +51,8 @@ def feature_engineering_pipeline():
     dataset = create_derived_features(dataset, lags=5)
     
     # 3. split the data into training and test data
-    X_train,X_test,y_train,y_test = split_data(dataset,"pedestrians_count")
+    X_train,X_test,y_train,y_test,X_train_eda_date_infos, X_test_eda_date_infos = split_data(dataset,"pedestrians_count")
+    #X_train,X_test,y_train,y_test = split_data(dataset,"pedestrians_count")
     # print("Data splitted.")
     # print(type(X_train))
     
@@ -67,7 +68,9 @@ def feature_engineering_pipeline():
 
     # 6. save the preprocessed data as a csv file for EDA
     # Create directory if not exists
-    create_eda_data(X_train,X_test,y_train,y_test)
+    #X_train_eda_date_infos = X_train[["Year", "Month", "Day", "Hour"]].copy()
+    #X_test_eda_date_infos = X_test[["Year", "Month", "Day", "Hour"]].copy()
+    create_eda_data(X_train,X_test,y_train,y_test,X_train_eda_date_infos, X_test_eda_date_infos)
     
     logger.info("Feature engineering pipeline successfully completed.")
     

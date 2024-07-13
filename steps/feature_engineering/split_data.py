@@ -14,7 +14,9 @@ def split_data(dataset:pd.DataFrame, label: str) -> Tuple[
     Annotated[pd.DataFrame,"X_train"],
     Annotated[pd.DataFrame,"X_test"],
     Annotated[pd.Series,"y_train"],
-    Annotated[pd.Series,"y_test"]]:
+    Annotated[pd.Series,"y_test"],
+    Annotated[pd.DataFrame,"X_train_eda_date_infos"],
+    Annotated[pd.DataFrame,"X_test_eda_date_infos"]]:
     """
     Splits a dataset into training and testing sets.
 
@@ -35,20 +37,34 @@ def split_data(dataset:pd.DataFrame, label: str) -> Tuple[
         # 2. Split the data into training and testing sets, without shuffling the data and with a test size of 20%
         X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2,shuffle=False)
         #print the shapes of the training and testing data
-        print("Shapes of the training and testing data:")
+        #print("Shapes of the training and testing data:")
         # print(dataset.shape)
         # print(X_train.dtypes)
         # print(X_train.shape)
         # print(X_test.dtypes)
         # print(X_test.shape)
-        print(y_train.dtypes)
-        print(y_train.shape)
-        print(y_test.dtypes)
-        print(y_test.shape)
+        #print(y_train.dtypes)
+        #print(y_train.shape)
+        #print(y_test.dtypes)
+        #print(y_test.shape)
         
         logger.info("Split data step successfully completed.")
         
-        return X_train,X_test,y_train,y_test
+        
+        # for eda purposes
+        X_train_eda_date_infos = X_train[["year", "month", "day", "hour"]].copy()
+        X_test_eda_date_infos = X_test[["year", "month", "day", "hour"]].copy()
+        
+        # if X_test_eda_date_infos is None:
+        #     print("X_test_eda_date_infos is None")
+        # if X_train_eda_date_infos is None:
+        #     print("X_train_eda_date_infos is None")
+        # if X_train_eda_date_infos.empty:
+        #     print("X_train_eda_date_infos is empty")
+        # if X_test_eda_date_infos.empty:
+        #     print("X_test_eda_date_infos is empty")
+        
+        return X_train,X_test,y_train,y_test, X_train_eda_date_infos, X_test_eda_date_infos
     
     except Exception as e:
         print("Error in split_data step: ", e)

@@ -45,33 +45,6 @@ def training_pipeline(model_variant:str, model_type:str):
         # 4. Evaluate the model using the test data, here we calculate and save the out-of-sample score (MSE) and other metrics
         #deploy, rmse, mse, r2, mae = evaluate_model(model,X_test,y_test)
         deploy, rmse, mse, r2, mae = evaluate_model(model,X_test,y_test, model_variant, model_type, trials, in_sample_rmse, best_parameters)
-        
-        # # log run to wandb
-        # name = f"{model_variant}_{model_type}_{trials}_trials" # if name is not unique, wandb will rename it automatically
-        # wandb.init(project="forcasting_model_multivariant", name=name)
-        # # 5.1 Log the run to wandb with all the parameters and metrics
-        # wandb.log({"model_variant": model_variant, 
-        #            "model_type": model_type, 
-        #            "trials": trials, 
-        #            "in_sample_rmse": in_sample_rmse,
-        #            "rmse": rmse,
-        #            "mse": mse,
-        #            "r2": r2,
-        #            "mae": mae})
-        
-        # # log the best hyperparameters to wandb separately
-        # for key, value in best_parameters.items():
-        #     wandb.log({key: value})
-        # #wandb.log(best_parameters)
-        
-        # wandb.log({"deployment_decision": deploy})
-        
-        # # 5.2 if deploy == True, log the training model as an artifact to the run as well
-        # if deploy:
-        #     logger.info("Model will be deployed.")
-        #     wandb.log({"model": model})
-            
-        # wandb.finish()
             
         logger.info("Finished training_pipeline.")
             

@@ -70,4 +70,4 @@ def evaluate_model(model:RegressorMixin,X_test:pd.DataFrame,y_test:pd.DataFrame,
     
     wandb.finish()
         
-    return deploy, rmse, mse, r2, mae
+    return deploy

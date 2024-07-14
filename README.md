@@ -73,4 +73,4 @@ The main file (`main.py` or equivalent) sets up zenML and runs the pipeline. It 
 
 ## View Pipeline Results
 
-The results of the pipeline runs can be viewed at<a href="https://wandb.ai/ss24_eai"> Link to Results </a>.
+The results of the pipeline runs can be viewed at<a href="[https://wandb.ai/ss24_eai](https://api.wandb.ai/links/ss24_eai/6m7ogbgn)"> Link to Results </a>.

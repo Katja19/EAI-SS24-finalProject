@@ -36,7 +36,6 @@ def training_pipeline(model_variant:str, model_type:str, lags:int, trials:int):
         y_test = client.get_artifact_version("y_test") # not encoded cause it is a regression problem
         
         # 2. Get the best hyperparameters for the model
-        trials = 5
         best_parameters = hp_tuning(X_train,y_train,model_type, trials=trials)
         
         # 3. Train the model and get the in-sample score (RMSE)

@@ -16,7 +16,9 @@ def split_data(dataset:pd.DataFrame, label: str) -> Tuple[
     Annotated[pd.Series,"y_train"],
     Annotated[pd.Series,"y_test"],
     Annotated[pd.DataFrame,"X_train_eda_date_infos"],
-    Annotated[pd.DataFrame,"X_test_eda_date_infos"]]:
+    Annotated[pd.DataFrame,"X_test_eda_date_infos"],
+    Annotated[pd.Series,"y_train_eda"],
+    Annotated[pd.Series,"y_test_eda"]]:
     """
     Splits a dataset into training and testing sets.
 
@@ -37,16 +39,11 @@ def split_data(dataset:pd.DataFrame, label: str) -> Tuple[
         # 2. Split the data into training and testing sets, without shuffling the data and with a test size of 20%
         X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2,shuffle=False)
         #print the shapes of the training and testing data
-        #print("Shapes of the training and testing data:")
-        # print(dataset.shape)
-        # print(X_train.dtypes)
-        # print(X_train.shape)
-        # print(X_test.dtypes)
-        # print(X_test.shape)
-        #print(y_train.dtypes)
-        #print(y_train.shape)
-        #print(y_test.dtypes)
-        #print(y_test.shape)
+        print("Shapes of the training and testing data:")
+        print(f"X_train: {X_train.shape}")
+        print(f"X_test: {X_test.shape}")
+        print(f"y_train: {y_train.shape}")
+        print(f"y_test: {y_test.shape}")
         
         logger.info("Split data step successfully completed.")
         
@@ -57,6 +54,10 @@ def split_data(dataset:pd.DataFrame, label: str) -> Tuple[
         #X_test_eda_date_infos = X_test[["year", "month", "day", "hour"]].copy()
         X_test_eda_date_infos = X_test[["year", "month", "day", "hour", "location_id"]].copy()
         
+        print("Shapes of the eda date infos data:")
+        print(f"X_train_eda_date_infos: {X_train_eda_date_infos.shape}")
+        print(f"X_test_eda_date_infos: {X_test_eda_date_infos.shape}")
+        
         # if X_test_eda_date_infos is None:
         #     print("X_test_eda_date_infos is None")
         # if X_train_eda_date_infos is None:
@@ -66,7 +67,11 @@ def split_data(dataset:pd.DataFrame, label: str) -> Tuple[
         # if X_test_eda_date_infos.empty:
         #     print("X_test_eda_date_infos is empty")
         
-        return X_train,X_test,y_train,y_test, X_train_eda_date_infos, X_test_eda_date_infos
+        # make a copy of the y data
+        y_train_eda = y_train.copy()
+        y_test_eda = y_test.copy()
+        
+        return X_train,X_test,y_train,y_test, X_train_eda_date_infos, X_test_eda_date_infos, y_train_eda, y_test_eda
     
     except Exception as e:
         print("Error in split_data step: ", e)

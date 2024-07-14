@@ -43,8 +43,8 @@ def feature_preprocessor(pipeline:Pipeline,
         
         logger.info("Feature preprocessor step successfully completed.")
         
-        print("Pipeline: ", pipeline)
-        print("Pipeline type: ", type(pipeline))
+        #print("Pipeline: ", pipeline)
+        #print("Pipeline type: ", type(pipeline))
         
         return X_train_preprocessed, X_test_preprocessed, pipeline
     

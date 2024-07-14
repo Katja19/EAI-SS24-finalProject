@@ -24,31 +24,43 @@ def create_eda_data(X_train:pd.DataFrame,X_test:pd.DataFrame, y_train:pd.Series,
     # print(f"y_train nan values: {y_train.isnull().sum()}")
     # print(f"y_test nan values: {y_test.isnull().sum()}")
     
+    # fist make copies of the data
+    X_train_copy = X_train.copy()
+    X_test_copy = X_test.copy()
+    y_train_copy = y_train.copy()
+    y_test_copy = y_test.copy()
+    
+    
     # Reset index to ensure proper concatenation
-    X_train = X_train.reset_index(drop=True)
-    X_test = X_test.reset_index(drop=True)
-    y_train = y_train.reset_index(drop=True)
-    y_test = y_test.reset_index(drop=True)
+    X_train_copy = X_train_copy.reset_index(drop=True)
+    X_test_copy = X_test_copy.reset_index(drop=True)
+    y_train_copy = y_train_copy.reset_index(drop=True)
+    y_test_copy = y_test_copy.reset_index(drop=True)
+    
     
     #X_train_eda = X_train.drop(["year", "month", "day", "hour"], axis=1)
     #X_test_eda = X_test.drop(["year", "month", "day", "hour"], axis=1)
-    X_test_eda = X_test.drop(["year", "month", "day", "hour", "location_id"], axis=1)
-    X_train_eda = X_train.drop(["year", "month", "day", "hour", "location_id"], axis=1)
+    
+    # Drop the date information columns from the dataframes 
+    X_train_eda = X_train_copy.drop(["year", "month", "day", "hour", "location_id"], axis=1)
+    X_test_eda = X_test_copy.drop(["year", "month", "day", "hour", "location_id"], axis=1)
+    
     X_train_eda = X_train_eda.reset_index(drop=True)
     X_test_eda = X_test_eda.reset_index(drop=True)
+    
     X_train_eda_date_infos = X_train_eda_date_infos.reset_index(drop=True)
     X_test_eda_date_infos = X_test_eda_date_infos.reset_index(drop=True)
     
     # Add the date information back to the dataframes
-    X_train = pd.concat([X_train_eda, X_train_eda_date_infos], axis=1) 
-    X_test = pd.concat([X_test_eda, X_test_eda_date_infos], axis=1)
+    X_train_copy = pd.concat([X_train_eda, X_train_eda_date_infos], axis=1) 
+    X_test_copy = pd.concat([X_test_eda, X_test_eda_date_infos], axis=1)
     
     #print(f"X_train shape: {X_train.shape}")
     #print(f"X_test shape: {X_test.shape}")
     
     # Merge the X_train and y_train dataframes
-    eda_train = pd.concat([X_train, y_train], axis=1)
-    eda_test = pd.concat([X_test, y_test], axis=1)
+    eda_train = pd.concat([X_train_copy, y_train_copy], axis=1)
+    eda_test = pd.concat([X_test_copy, y_test_copy], axis=1)
 
     #print(f"eda_train shape: {eda_train.shape}")
     #print(f"eda_test shape: {eda_test.shape}")

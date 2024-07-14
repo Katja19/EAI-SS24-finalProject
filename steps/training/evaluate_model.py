@@ -50,7 +50,8 @@ def evaluate_model(model:RegressorMixin,
     model_variant_char = model_variant[0]
         
     # 4. Log everything of the run to wandb
-    wandb.init(project="forecasting_model_multivariant", name=f"{model_variant_char}_{model_type}_{lags}_lags_{trials}_trials")
+    run_name = f"{model_variant_char}_{model_type}_{lags}_lags_{trials}_trials"
+    wandb.init(project="forecasting_model_multivariant", name=run_name)
     wandb.log({"model_variant": model_variant,
                 "model_type": model_type,
                 "trials": trials, 
@@ -78,7 +79,8 @@ def evaluate_model(model:RegressorMixin,
         with open(f"model.pkl", "wb") as f:
             pickle.dump(model, f)
         
-        model_artifact = wandb.Artifact(f"{model_variant}_{model_type}_{trials}_trials", type="model") # create a model artifact
+        model_name = run_name + "_model"
+        model_artifact = wandb.Artifact(name=model_name, type="model") # create a model artifact
         model_artifact.add_file("model.pkl")
         wandb.log_artifact(model_artifact) # this will save the model artifact to wandb
         
@@ -91,7 +93,8 @@ def evaluate_model(model:RegressorMixin,
     print(type(pipeline_version))
     
     # save the pipeline to wandb
-    pipeline_artifact = wandb.Artifact(f"{model_variant}_{model_type}_{trials}_trials_pipe", type="pipeline")
+    pipe_name = run_name + "_pipeline"
+    pipeline_artifact = wandb.Artifact(name=pipe_name, type="pipeline")
     pipeline_artifact.add_dir(pipeline_dir)
     wandb.log_artifact(pipeline_artifact)
     

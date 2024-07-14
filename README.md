@@ -53,10 +53,20 @@ The `EDA` notebook includes the Exploratory Data Analysis of data before and aft
 - Summary Statistics
 - Visualization of the Analysis
 
-![Pedestrian count by location by day](images\pedestrien_count_per_day.png)
+![Pedestrian count by location by day](images/pedestrien_count_per_day.png)
 
 ## Files
 
 __init__.py: This special file is used to import all the functions from the steps folder. 
 
-run.py: Is used to start our pipeline
+__run__.py: Is used to start our pipeline
+
+## Main File
+
+The main file (`main.py` or equivalent) sets up zenML and runs the pipeline. It involves the following components:
+
+| COMPONENT_TYPE     | COMPONENT_NAME           |
+|--------------------|--------------------------|
+| EXPERIMENT_TRACKER | wandb_experiment_tracker |
+| ORCHESTRATOR       | default                  |
+| ARTIFACT_STORE     | default                  |

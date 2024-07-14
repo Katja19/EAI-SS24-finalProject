@@ -42,8 +42,8 @@ def create_eda_data(X_train:pd.DataFrame,X_test:pd.DataFrame, y_train:pd.Series,
     #X_test_eda = X_test.drop(["year", "month", "day", "hour"], axis=1)
     
     # Drop the date information columns from the dataframes 
-    X_train_eda = X_train_copy.drop(["year", "month", "day", "hour", "location_id"], axis=1)
-    X_test_eda = X_test_copy.drop(["year", "month", "day", "hour", "location_id"], axis=1)
+    X_train_eda = X_train_copy.drop(["year", "month", "day", "hour", "location_id", "temp", "humidity"], axis=1)
+    X_test_eda = X_test_copy.drop(["year", "month", "day", "hour", "location_id", "temp", "humidity"], axis=1)
     
     X_train_eda = X_train_eda.reset_index(drop=True)
     X_test_eda = X_test_eda.reset_index(drop=True)

@@ -78,7 +78,7 @@ def feature_engineering_pipeline(model_variant:str, model_type:str, lags:int, tr
     # Create directory if not exists
     #X_train_eda_date_infos = X_train[["Year", "Month", "Day", "Hour"]].copy()
     #X_test_eda_date_infos = X_test[["Year", "Month", "Day", "Hour"]].copy()
-    create_eda_data(X_train,X_test,y_train_eda,y_test_eda,X_train_eda_date_infos, X_test_eda_date_infos)
+    create_eda_data(X_train, X_test, y_train_eda, y_test_eda, X_train_eda_date_infos, X_test_eda_date_infos)
     
     # 7. scale the target variable if the model is a xgboost model, cause gradient boosting models need scaled target variables, cause they are sensitive to the magnitude of the target variable
     if model_type == "xgboost":

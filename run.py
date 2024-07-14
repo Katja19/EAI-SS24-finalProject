@@ -24,3 +24,7 @@ def run_pipelines(model_variant, model_type, lags, trials):
     # Execute the inference pipeline # wird in der main seperat später ausgeführt
     #inference_pipeline(model_variant=model_variant, model_type=model_type)
     #inference_pipeline()
+    
+#def run_inference_pipeline(lags):
+#    # Execute the inference pipeline
+#    inference_pipeline(lags)

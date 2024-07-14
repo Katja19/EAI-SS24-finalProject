@@ -52,8 +52,10 @@ def split_data(dataset:pd.DataFrame, label: str) -> Tuple[
         
         
         # for eda purposes
-        X_train_eda_date_infos = X_train[["year", "month", "day", "hour"]].copy()
-        X_test_eda_date_infos = X_test[["year", "month", "day", "hour"]].copy()
+        #X_train_eda_date_infos = X_train[["year", "month", "day", "hour"]].copy()
+        X_train_eda_date_infos = X_train[["year", "month", "day", "hour", "location_id"]].copy()
+        #X_test_eda_date_infos = X_test[["year", "month", "day", "hour"]].copy()
+        X_test_eda_date_infos = X_test[["year", "month", "day", "hour", "location_id"]].copy()
         
         # if X_test_eda_date_infos is None:
         #     print("X_test_eda_date_infos is None")

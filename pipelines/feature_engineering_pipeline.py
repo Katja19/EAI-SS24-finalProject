@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 # The cache is used to store the data and the results of the steps, so we dont set: @pipeline#(enable_cache=False)
 @pipeline
-def feature_engineering_pipeline():
+def feature_engineering_pipeline(model_variant:str, model_type:str, lags:int, trials:int):
     """
         Pipeline to update the data and perform feature engineering on the data.
     """
@@ -48,7 +48,7 @@ def feature_engineering_pipeline():
     #print(type(dataset))
 
     # 2.5 create derived features, we will loose the first num_lags rows
-    dataset = create_derived_features(dataset, lags=5)
+    dataset = create_derived_features(dataset, lags)
     
     # 3. split the data into training and test data
     X_train,X_test,y_train,y_test,X_train_eda_date_infos, X_test_eda_date_infos = split_data(dataset,"pedestrians_count")
@@ -64,7 +64,7 @@ def feature_engineering_pipeline():
     # 5. perform feature engineering on the X data and return the preprocessed data and 
     # # Now the pipeline is fitted on the training data to learn the necessary transformations, 
     # # that will be applied to the test data later on.
-    X_train,X_test,fitted_pipeline = feature_preprocessor(prepro_pipeline,X_train,X_test) 
+    X_train,X_test,fitted_pipeline = feature_preprocessor(prepro_pipeline,X_train,X_test, model_variant, model_type, lags, trials) 
 
     # 6. save the preprocessed data as a csv file for EDA
     # Create directory if not exists
@@ -73,5 +73,7 @@ def feature_engineering_pipeline():
     create_eda_data(X_train,X_test,y_train,y_test,X_train_eda_date_infos, X_test_eda_date_infos)
     
     logger.info("Feature engineering pipeline successfully completed.")
+    
+    return fitted_pipeline
     
     

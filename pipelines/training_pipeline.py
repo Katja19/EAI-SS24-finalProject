@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 @pipeline#(experiment_tracker="wandb_experiment_tracker")
-def training_pipeline(model_variant:str, model_type:str):
+def training_pipeline(model_variant:str, model_type:str, lags:int, trials:int):
     """ 
         Pipeline to train and deploy a machine learning model using preprocessed and encoded datasets.
     """
@@ -44,7 +44,8 @@ def training_pipeline(model_variant:str, model_type:str):
         
         # 4. Evaluate the model using the test data, here we calculate and save the out-of-sample score (MSE) and other metrics
         #deploy, rmse, mse, r2, mae = evaluate_model(model,X_test,y_test)
-        deploy, rmse, mse, r2, mae = evaluate_model(model,X_test,y_test, model_variant, model_type, trials, in_sample_rmse, best_parameters)
+        #deploy = evaluate_model(model,X_test,y_test, model_variant, model_type, trials, in_sample_rmse, lags, trials, best_parameters)
+        deploy = evaluate_model(model=model, X_test=X_test, y_test=y_test, model_variant=model_variant, model_type=model_type, trials=trials, in_sample_rmse=in_sample_rmse, lags=lags, best_parameters=best_parameters)
             
         logger.info("Finished training_pipeline.")
             

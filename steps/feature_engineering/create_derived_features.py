@@ -63,7 +63,7 @@ def create_derived_features(dataset:pd.DataFrame, lags:int) -> Annotated[pd.Data
         
         #print("Derived features created inside the pipeline.")
         # print(dataset.head())
-        print(dataset.columns)
+        #print(dataset.columns)
         for col in dataset.columns:
             # if datetype is object, print the column name
             if dataset[col].dtype == 'object':

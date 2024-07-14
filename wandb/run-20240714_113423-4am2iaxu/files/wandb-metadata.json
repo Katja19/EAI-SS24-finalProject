@@ -1,0 +1,52 @@
+{
+    "os": "Windows-10-10.0.22631-SP0",
+    "python": "3.9.13",
+    "heartbeatAt": "2024-07-14T09:34:23.918817",
+    "startedAt": "2024-07-14T09:34:23.019933",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "<python with no main file>",
+    "codePathLocal": null,
+    "git": {
+        "remote": "https://github.com/Katja19/EAI-SS24-finalProject.git",
+        "commit": "8139a76af75d3470244269a0500826a58b518272"
+    },
+    "email": "gavarina1@gmail.com",
+    "root": "D:/Studium/Master/EnterpriseAI/EAI-SS24-finalProject",
+    "host": "DESKTOP-E32HL9L",
+    "username": "gavar",
+    "executable": "c:\\Users\\gavar\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
+    "cpu_count": 6,
+    "cpu_count_logical": 12,
+    "cpu_freq": {
+        "current": 2592.0,
+        "min": 0.0,
+        "max": 2592.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2592.0,
+            "min": 0.0,
+            "max": 2592.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 232.88476181030273,
+            "used": 5.086139678955078
+        }
+    },
+    "gpu": "GeForce RTX 2060",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "GeForce RTX 2060",
+            "memory_total": 6442450944
+        }
+    ],
+    "memory": {
+        "total": 15.921131134033203
+    }
+}

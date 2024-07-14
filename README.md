@@ -8,7 +8,7 @@ Group members: Michael Baals, Katja Gegg, Oryna Hedrovych
 This final project was created as part of the course "Enterprise AI" by Group 5.
 It implements an end-to-end machine learning pipeline to predict the pedestrian count on three streets in Würzburg for the next 24 hours.
 
-The data that is used in this repository is retrieved from the<a href="https://opendata.wuerzburg.de/explore/?refine.publisher=Stadt+Würzburg&sort=modified"> open data portal </a>, which provides different data sources about Wuerzburg.
+The data that is used in this repository is retrieved from the<a href="https://opendata.wuerzburg.de/explore/dataset/passantenzaehlung_stundendaten/information/"> open data portal </a>, which provides different data sources about Wuerzburg.
 
 ### Prerequisites
 Python 3.8 up to 3.11
@@ -70,3 +70,7 @@ The main file (`main.py` or equivalent) sets up zenML and runs the pipeline. It 
 | EXPERIMENT_TRACKER | wandb_experiment_tracker |
 | ORCHESTRATOR       | default                  |
 | ARTIFACT_STORE     | default                  |
+
+## View Pipeline Results
+
+The results of the pipeline runs can be viewed at<a href="https://wandb.ai/ss24_eai"> Link to Results </a>.

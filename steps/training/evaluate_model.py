@@ -91,7 +91,7 @@ def evaluate_model(model:RegressorMixin,
     print(type(pipeline_version))
     
     # save the pipeline to wandb
-    pipeline_artifact = wandb.Artifact(f"{model_variant}_{model_type}_{trials}_trials", type="pipeline")
+    pipeline_artifact = wandb.Artifact(f"{model_variant}_{model_type}_{trials}_trials_pipe", type="pipeline")
     pipeline_artifact.add_dir(pipeline_dir)
     wandb.log_artifact(pipeline_artifact)
     

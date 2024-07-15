@@ -87,7 +87,7 @@ def create_inference_data(dataset_hist: pd.DataFrame, event_dataset:pd.DataFrame
     weather_forecast_24h = pd.concat([weather_forecast_24h_1, weather_forecast_24h_2, weather_forecast_24h_3], axis=0)
     
     print("weather_forecast_24h.columns")
-    print(weather_forecast_24h.columns)
+    #print(weather_forecast_24h.columns)
     
     # 5 merge die weather_forecast_24h with the dataset_hist on the timestamp column and 
     # fill the missing values with nan, cause they will be filled during the recursive forecasting with the model
@@ -96,7 +96,7 @@ def create_inference_data(dataset_hist: pd.DataFrame, event_dataset:pd.DataFrame
     
     
     print("inference_data.columns")
-    print(inference_data.columns)
+    #print(inference_data.columns)
     
     # 4 create lag features for the weather data
     for lag in range(1, lags+1):
@@ -113,7 +113,11 @@ def create_inference_data(dataset_hist: pd.DataFrame, event_dataset:pd.DataFrame
     inference_data = pd.merge(inference_data, event_dataset, on='date', how='left')
     
     #controll
-    print(inference_data.isnull().sum())
+    for col in inference_data.columns:
+        # if in col is a nan value, print the column name
+        if inference_data[col].isnull().sum() > 0:
+            print(f"Warning: There are {inference_data[col].isnull().sum()} nan values in the column {col}.")
+        
     
     # saving the inference data as an csv file
     # spit the first_date_str and last_date_str by 'T' and take the first part

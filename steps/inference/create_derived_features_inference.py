@@ -18,7 +18,7 @@ def create_derived_features_inference(dataset:pd.DataFrame, event_dataset:pd.Dat
     
     logger.info("Starting create_derived_features step...")
     print("Starting create_derived_features step...")
-    print("dataset_dtypes: ", dataset.dtypes)
+    #print("dataset_dtypes: ", dataset.dtypes)
     print("dataset_shape: ", dataset.shape)
     print("lags: ", lags)
     
@@ -47,7 +47,7 @@ def create_derived_features_inference(dataset:pd.DataFrame, event_dataset:pd.Dat
         #    dataset['precip_lag_'+str(lag)] = dataset['precip'].shift(lag)
             
         # chekc if lag und lead features are created
-        print("dataset_dtypes: ", dataset.dtypes)
+        #print("dataset_dtypes: ", dataset.dtypes)
         print("dataset_shape: ", dataset.shape)
         
         # fill the missing values of the column timestamp with the infos of the column date or datetime
@@ -66,7 +66,7 @@ def create_derived_features_inference(dataset:pd.DataFrame, event_dataset:pd.Dat
         dataset['hour'] = dataset['timestamp'].str.extract(r'T(\d{2})').astype(int)
         dataset['weekday'] = pd.to_datetime(dataset['date']).dt.day_name() # soll später one hot encoded werden
         
-        print("dataset_dtypes: ", dataset.dtypes)
+        #print("dataset_dtypes: ", dataset.dtypes)
         print("dataset_shape: ", dataset.shape)
         
         # need to drop the timestamp column, cause we dont need it anymore and it cant be fit_transformed by the pipeline

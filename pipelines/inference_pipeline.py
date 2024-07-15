@@ -3,7 +3,7 @@ from steps import update_data
 from steps import load_data_inference, create_derived_features_inference, create_inference_data, get_model_and_preprocessing_pipeline, predictor
 
 @pipeline(enable_cache=False)
-def inference_pipeline(model_type:str, lags:int):
+def inference_pipeline(model_type:str, lags:int, trials:int):
     """
     Runs the inference pipeline to predict the target variable of the inference data
     """
@@ -38,7 +38,7 @@ def inference_pipeline(model_type:str, lags:int):
     #inference_data_original.to_csv(f"data/inference_{model_type}_{first_data_str}_to_{last_data_str}.csv", index=False)
     
     # 6. get the model and the preprocessing pipeline from wandb
-    model, preprocessing_pipeline = get_model_and_preprocessing_pipeline(model_type)
+    model, preprocessing_pipeline = get_model_and_preprocessing_pipeline(lags, trials, model_type)
     
     # 7. prediction: recursive preprocessing, forcasting an updating the inference data
     predictor(model, preprocessing_pipeline, inference_data_original, model_type, first_date_str, last_date_str, lags)

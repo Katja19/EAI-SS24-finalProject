@@ -3,8 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# own files
-
+# own additions
+wandb/
+fe_katja.ipynb
+temp_katja.ipynb
 
 # C extensions
 *.so

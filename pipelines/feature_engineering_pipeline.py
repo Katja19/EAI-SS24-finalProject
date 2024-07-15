@@ -1,4 +1,4 @@
-from steps import update_data, load_data, split_data, create_derived_features, create_preprocessing_pipeline, feature_preprocessor, create_eda_data
+from steps import update_data, load_data, split_data, create_derived_features, create_preprocessing_pipeline, feature_preprocessor, scale_target_variable, create_eda_data
 from zenml import pipeline
 import pandas as pd
 import os
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 # The cache is used to store the data and the results of the steps, so we dont set: @pipeline#(enable_cache=False)
 @pipeline
-def feature_engineering_pipeline():
+def feature_engineering_pipeline(model_variant:str, model_type:str, lags:int, trials:int):
     """
         Pipeline to update the data and perform feature engineering on the data.
     """
@@ -48,10 +48,10 @@ def feature_engineering_pipeline():
     #print(type(dataset))
 
     # 2.5 create derived features, we will loose the first num_lags rows
-    dataset = create_derived_features(dataset, lags=5)
+    dataset = create_derived_features(dataset, lags)
     
     # 3. split the data into training and test data
-    X_train,X_test,y_train,y_test,X_train_eda_date_infos, X_test_eda_date_infos = split_data(dataset,"pedestrians_count")
+    X_train,X_test,y_train,y_test,X_train_eda_date_infos, X_test_eda_date_infos, y_train_eda, y_test_eda = split_data(dataset,"pedestrians_count")
     #X_train,X_test,y_train,y_test = split_data(dataset,"pedestrians_count")
     # print("Data splitted.")
     # print(type(X_train))
@@ -64,14 +64,31 @@ def feature_engineering_pipeline():
     # 5. perform feature engineering on the X data and return the preprocessed data and 
     # # Now the pipeline is fitted on the training data to learn the necessary transformations, 
     # # that will be applied to the test data later on.
-    X_train,X_test,fitted_pipeline = feature_preprocessor(prepro_pipeline,X_train,X_test) 
+    X_train,X_test,fitted_pipeline = feature_preprocessor(prepro_pipeline,X_train,X_test, model_variant, model_type, lags, trials) 
+    
+    # 6. scale the target variable if the model is a xgboost model, cause gradient boosting models need scaled target variables, cause they are sensitive to the magnitude of the target variable
+    #if model_type == "xgboost":
+    #    # scale the target variable
+    #    scale_target_variable.after(split_data)
+    #    y_train, y_test = scale_target_variable(y_train, y_test)
+    #    print("Target variable scaled.")
+    
 
     # 6. save the preprocessed data as a csv file for EDA
     # Create directory if not exists
     #X_train_eda_date_infos = X_train[["Year", "Month", "Day", "Hour"]].copy()
     #X_test_eda_date_infos = X_test[["Year", "Month", "Day", "Hour"]].copy()
-    create_eda_data(X_train,X_test,y_train,y_test,X_train_eda_date_infos, X_test_eda_date_infos)
+    create_eda_data(X_train, X_test, y_train_eda, y_test_eda, X_train_eda_date_infos, X_test_eda_date_infos)
+    
+    # 7. scale the target variable if the model is a xgboost model, cause gradient boosting models need scaled target variables, cause they are sensitive to the magnitude of the target variable
+    if model_type == "xgboost":
+        # scale the target variable
+        scale_target_variable.after(split_data)
+        y_train, y_test = scale_target_variable(y_train, y_test)
+        print("Target variable scaled.")
     
     logger.info("Feature engineering pipeline successfully completed.")
+    
+    return fitted_pipeline
     
     

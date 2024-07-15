@@ -9,10 +9,16 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-@step
-def feature_preprocessor(pipeline:Pipeline,X_train:pd.DataFrame,X_test:pd.DataFrame)-> Tuple[Annotated[pd.DataFrame,"X_train_preprocessed"],
-                                                                                             Annotated[pd.DataFrame,"X_test_preprocessed"],
-                                                                                             Annotated[Pipeline,"pipeline"]]:
+@step(experiment_tracker="wandb_experiment_tracker")
+def feature_preprocessor(pipeline:Pipeline,
+                         X_train:pd.DataFrame,
+                         X_test:pd.DataFrame, 
+                         model_variant:str, 
+                         model_type:str, 
+                         lags:int, 
+                         trials:int)-> Tuple[Annotated[pd.DataFrame,"X_train_preprocessed"],
+                                            Annotated[pd.DataFrame,"X_test_preprocessed"],
+                                            Annotated[Pipeline,"pipeline"]]:
     
     """
         Perform feature engineering on the X data and return the preprocessed data and the fitted pipeline.
@@ -22,8 +28,6 @@ def feature_preprocessor(pipeline:Pipeline,X_train:pd.DataFrame,X_test:pd.DataFr
     logger.info("Starting feature_preprocessor step...")
     
     try:
-        
-
         
         # 1. Fit the pipeline on the training data to learn the necessary transformations and transform the training data and the test data
         X_train_transformed = pipeline.fit_transform(X_train)
@@ -37,18 +41,12 @@ def feature_preprocessor(pipeline:Pipeline,X_train:pd.DataFrame,X_test:pd.DataFr
         X_train_preprocessed = pd.DataFrame(X_train_transformed,columns=all_features)
         X_test_preprocessed = pd.DataFrame(X_test_transformed,columns=all_features)
         
-        print("Feature preprocessed X:")
-        for col in X_train_preprocessed.columns:
-            print(f"{col}: {X_train_preprocessed[col].dtype}")
-        
-        #print(X_train_preprocessed.head())
-        #print(X_train.dtypes)
-        #print(X_test_preprocessed.head())
-        #print(X_test.dtypes)
-        
         logger.info("Feature preprocessor step successfully completed.")
         
-        return X_train_preprocessed,X_test_preprocessed,pipeline, 
+        #print("Pipeline: ", pipeline)
+        #print("Pipeline type: ", type(pipeline))
+        
+        return X_train_preprocessed, X_test_preprocessed, pipeline
     
     except Exception as e:
         logger.error("Error in feature_preprocessor step: ", e)

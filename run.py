@@ -1,6 +1,6 @@
 from pipelines.training_pipeline import training_pipeline
 from pipelines.feature_engineering_pipeline import feature_engineering_pipeline
-from pipelines.inference_pipeline import inference_pipeline
+#from pipelines.inference_pipeline import inference_pipeline
 import logging
 import wandb
 
@@ -27,4 +27,5 @@ def run_pipelines(model_variant, model_type, lags, trials):
     
 def run_inference_pipeline(model_type,lags):
 #    # Execute the inference pipeline
-    inference_pipeline(model_type, lags)
+    #inference_pipeline(model_type, lags)
+    pass

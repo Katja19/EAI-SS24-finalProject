@@ -71,6 +71,13 @@ def split_data(dataset:pd.DataFrame, label: str) -> Tuple[
         y_train_eda = y_train.copy()
         y_test_eda = y_test.copy()
         
+        print("Shapes of the data")
+        print(f"X_train: {X_train.shape}")
+        print(f"X_test: {X_test.shape}")
+        print(f"y_train: {y_train.shape}")
+        print(f"y_test: {y_test.shape}")
+        
+        
         return X_train,X_test,y_train,y_test, X_train_eda_date_infos, X_test_eda_date_infos, y_train_eda, y_test_eda
     
     except Exception as e:

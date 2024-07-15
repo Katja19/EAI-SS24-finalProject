@@ -32,8 +32,12 @@ def training_pipeline(model_variant:str, model_type:str, lags:int, trials:int):
         client = Client()
         X_train = client.get_artifact_version("X_train_preprocessed")
         X_test = client.get_artifact_version("X_test_preprocessed")
-        y_train = client.get_artifact_version("y_train") # not encoded cause it is a regression problem
-        y_test = client.get_artifact_version("y_test") # not encoded cause it is a regression problem
+        if model_type == "xgboost":
+            y_train = client.get_artifact_version("y_train_scaled")
+            y_test = client.get_artifact_version("y_test_scaled")
+        else:
+            y_train = client.get_artifact_version("y_train") # not encoded cause it is a regression problem
+            y_test = client.get_artifact_version("y_test") # not encoded cause it is a regression problem
         
         # 2. Get the best hyperparameters for the model
         best_parameters = hp_tuning(X_train,y_train,model_type, trials=trials)

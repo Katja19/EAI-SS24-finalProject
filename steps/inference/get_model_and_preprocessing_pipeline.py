@@ -4,6 +4,8 @@ from typing import Tuple
 import pickle
 import os
 import wandb
+import requests
+from io import BytesIO
 
 @step
 def get_model_and_preprocessing_pipeline(model_type:str) -> Tuple[object, object]:
@@ -27,9 +29,7 @@ def get_model_and_preprocessing_pipeline(model_type:str) -> Tuple[object, object
             
             # pipeline
             artifact_pipe = run.use_artifact('ss24_eai/forecasting_model_multivariant/m_xgboost_10_lags_10_trials_pipeline:latest', type='pipeline')
-            artifact_pipe_dir = artifact_pipe.download()
-
-            pipeline = client.get_pipeline_from_dir(artifact_pipe_dir)
+            pipeline_url = artifact_pipe.direct_url
             
         elif model_type == 'random_forest':
             #model
@@ -41,12 +41,18 @@ def get_model_and_preprocessing_pipeline(model_type:str) -> Tuple[object, object
             
             # pipeline
             artifact_pipe = run.use_artifact('ss24_eai/forecasting_model_multivariant/m_random_forest_5_lags_50_trials_pipeline:latest', type='pipeline')
-            artifact_pipe_dir = artifact_pipe.download()
-
-            pipeline = client.get_pipeline_from_dir(artifact_pipe_dir)
+            pipeline_url = artifact_pipe.direct_url
             
         else:
             raise ValueError(f'In the inference_pipeline the model_type {model_type} is not supported.')
+        
+        # Download pipeline from WandB artifact URL
+        response = requests.get(pipeline_url)
+        if response.status_code == 200:
+            pipeline = pickle.load(BytesIO(response.content))
+        else:
+            raise Exception(f"Error downloading pipeline from WandB artifact URL: {pipeline_url}")
+        
         
     except Exception as e:
         print("Error in get_model_and_preprocessing_pipeline: ", e)

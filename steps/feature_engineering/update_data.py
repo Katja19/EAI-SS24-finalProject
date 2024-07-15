@@ -28,11 +28,14 @@ def update_data():
     try:
         # 1. Connect to the SQLite database
         connection = sqlite3.connect('data.db')
+        print("Connection to SQLite DB successful")
     
         ############################################################
         # 2. City Wuerzburg pedestrian data
         # 2.1 Retrieve the latest data from the specified URL
         dataset = pd.read_csv("https://opendata.wuerzburg.de/api/explore/v2.1/catalog/datasets/passantenzaehlung_stundendaten/exports/csv?lang=de&timezone=Europe%2FBerlin&use_labels=true&delimiter=%3B",delimiter=";")
+        
+        print("dataset.shape: ", dataset.shape)
         
         # 2.2 Remove unnecessary columns from the dataset
         dataset.drop(["min_temperature","details","GeoShape","GeoPunkt"],axis=1,inplace=True)
@@ -45,6 +48,7 @@ def update_data():
             existing_data = pd.DataFrame(columns=["location_name", "pedestrians_count", "temperature"])
     
         #print(len(existing_data))
+        print("existing_data.shape: ", existing_data.shape)
 
         # 2.4 Merge the existing data with the updated dataset and remove duplicates
         merged_data = pd.concat([existing_data, dataset]).drop_duplicates().reset_index(drop=True)
@@ -60,6 +64,8 @@ def update_data():
 
         # 2.5 Replace the existing data in the 'data' table with the merged dataset
         merged_data.to_sql('data', connection, if_exists='replace', index=False)
+        
+        print("Data successfully updated.")
 
         ############################################################
         # 3. historical weather data for Wuerzburg
@@ -85,9 +91,12 @@ def update_data():
 
         # Construct the full API URL
         url = f"{base_url}/{latest_date}/{current_date}"
+        
+        print("url: ", url)
 
         # Send the GET request
         response = requests.get(url, params=params)
+        print("response.status_code: ", response.status_code)
 
         if response.status_code == 200:
             # Read the response as a DataFrame
@@ -113,6 +122,9 @@ def update_data():
             
             # Replace the existing weather data in the 'weather' table with the merged dataset
             merged_weather_data.to_sql('weather', connection, if_exists='replace', index=False)
+            
+            print("Weather data successfully updated.")
+            
         else:
             print(f"Failed to retrieve weather data. Status code: {response.status_code}")
 

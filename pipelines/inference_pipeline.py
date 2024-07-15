@@ -14,14 +14,14 @@ def inference_pipeline(model_type:str, lags:int):
         lags = 5
     
     # 0. ensue the execution order of the steps
-    load_data_inference.after(update_data)
+    #load_data_inference.after(update_data)
     create_derived_features_inference.after(load_data_inference)
     create_inference_data.after(create_derived_features_inference)
     get_model_and_preprocessing_pipeline.after(create_inference_data)
     predictor.after(get_model_and_preprocessing_pipeline)
 
     # 1. we update the data in the database using the update_data step from the feature_engineering pipeline
-    update_data()
+    #update_data()
     
     # 2. we load the data similar to the load_data step from the feature_engineering pipeline,
     # but this time we dont drop rows with null values, cause we need them for the recursive forecasting

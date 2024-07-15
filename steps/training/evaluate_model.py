@@ -84,19 +84,23 @@ def evaluate_model(model:RegressorMixin,
         model_artifact.add_file(f"{run_name}_model.pkl")
         wandb.log_artifact(model_artifact) # this will save the model artifact to wandb
         
-    # 6. save the fitted pipeline in wandb
-    # get the pipeline from zenml
-    client = Client()
-    pipeline_version = client.get_artifact_version("pipeline")
-    pipeline_dir = pipeline_version.uri
-    print("pipeline_version: ", pipeline_version)
-    print(type(pipeline_version))
-    
-    # save the pipeline to wandb
-    pipe_name = run_name + "_pipeline"
-    pipeline_artifact = wandb.Artifact(name=pipe_name, type="pipeline")
-    pipeline_artifact.add_dir(pipeline_dir)
-    wandb.log_artifact(pipeline_artifact)
+        # 6. save the fitted pipeline in wandb
+        # get the pipeline from zenml
+        client = Client()
+        pipeline_version = client.get_artifact_version("pipeline")
+        #pipeline_dir = pipeline_version.uri
+        print("pipeline_version: ", pipeline_version)
+        print(type(pipeline_version))
+        
+        # open a file and save the pipeline
+        with open(f"{run_name}_pipeline.pkl", "wb") as f:
+            pickle.dump(pipeline_version, f)
+        
+        # save the pipeline to wandb
+        pipe_name = run_name + "_pipeline"
+        pipeline_artifact = wandb.Artifact(name=pipe_name, type="pipeline")
+        pipeline_artifact.add_file(f"{run_name}_pipeline.pkl")
+        wandb.log_artifact(pipeline_artifact)
     
         
     logger.info(f"Deployment decision: {deploy}")

@@ -91,7 +91,9 @@ def create_inference_data(dataset_hist: pd.DataFrame, event_dataset:pd.DataFrame
     
     # 5 merge die weather_forecast_24h with the dataset_hist on the timestamp column and 
     # fill the missing values with nan, cause they will be filled during the recursive forecasting with the model
-    inference_data = pd.merge(dataset_hist, weather_forecast_24h, on=['datetime', 'location_id'], how='outer', axis=0) # vertical concatenation (untereinander)
+    #inference_data = pd.merge(dataset_hist, weather_forecast_24h, on=['datetime', 'location_id'], how='outer', axis=0) # vertical concatenation (untereinander)
+    inference_data = pd.concat([dataset_hist, weather_forecast_24h], axis=0) # Vertical concatenation
+    
     
     print("inference_data.columns")
     print(inference_data.columns)
@@ -114,6 +116,15 @@ def create_inference_data(dataset_hist: pd.DataFrame, event_dataset:pd.DataFrame
     print(inference_data.isnull().sum())
     
     # saving the inference data as an csv file
-    inference_data.to_csv(f"data/inference_{model_type}_{first_date_str}_to_{last_date_str}.csv", index=False)
+    # spit the first_date_str and last_date_str by 'T' and take the first part
+    first_date_day = first_date_str.split('T')[0]
+    first_date_hour = first_date_str.split('T')[1]
+    last_date_day = last_date_str.split('T')[0]
+    last_date_hour = last_date_str.split('T')[1]
+    # get the fist two chars
+    first_date_hour = first_date_hour[:2]
+    last_date_hour = last_date_hour[:2]
+    
+    inference_data.to_csv(f"data/inference_{model_type}_{first_date_day}_{first_date_hour}_to_{last_date_day}_{last_date_hour}.csv", index=False)
     
     return inference_data, first_date_str, last_date_str

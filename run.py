@@ -24,7 +24,7 @@ def run_pipelines(model_variant, model_type, lags, trials):
     inference_pipeline(model_type, lags, pipe)
     #inference_pipeline()
     
-def run_inference_pipeline(model_type,lags):
-#    # Execute the inference pipeline
-    #inference_pipeline(model_type, lags)
-    pass
+#def run_inference_pipeline(model_type,lags):
+##    # Execute the inference pipeline
+#    #inference_pipeline(model_type, lags)
+#   pass

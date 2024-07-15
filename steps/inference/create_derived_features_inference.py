@@ -17,10 +17,10 @@ def create_derived_features_inference(dataset:pd.DataFrame, event_dataset:pd.Dat
     """
     
     logger.info("Starting create_derived_features step...")
-    print("Starting create_derived_features step...")
-    print("dataset_dtypes: ", dataset.dtypes)
-    print("dataset_shape: ", dataset.shape)
-    print("lags: ", lags)
+    # print("Starting create_derived_features step...")
+    # print("dataset_dtypes: ", dataset.dtypes)
+    # print("dataset_shape: ", dataset.shape)
+    # print("lags: ", lags)
     
     try:
         
@@ -47,8 +47,8 @@ def create_derived_features_inference(dataset:pd.DataFrame, event_dataset:pd.Dat
         #    dataset['precip_lag_'+str(lag)] = dataset['precip'].shift(lag)
             
         # chekc if lag und lead features are created
-        print("dataset_dtypes: ", dataset.dtypes)
-        print("dataset_shape: ", dataset.shape)
+        #print("dataset_dtypes: ", dataset.dtypes)
+        #print("dataset_shape: ", dataset.shape)
         
         # fill the missing values of the column timestamp with the infos of the column date or datetime
         for i in range(len(dataset)):
@@ -66,8 +66,8 @@ def create_derived_features_inference(dataset:pd.DataFrame, event_dataset:pd.Dat
         dataset['hour'] = dataset['timestamp'].str.extract(r'T(\d{2})').astype(int)
         dataset['weekday'] = pd.to_datetime(dataset['date']).dt.day_name() # soll später one hot encoded werden
         
-        print("dataset_dtypes: ", dataset.dtypes)
-        print("dataset_shape: ", dataset.shape)
+        #print("dataset_dtypes: ", dataset.dtypes)
+        #print("dataset_shape: ", dataset.shape)
         
         # need to drop the timestamp column, cause we dont need it anymore and it cant be fit_transformed by the pipeline
         #dataset.drop('timestamp', axis=1, inplace=True)
@@ -82,6 +82,17 @@ def create_derived_features_inference(dataset:pd.DataFrame, event_dataset:pd.Dat
                 print(col)
                 
         logger.info("Create derived features step successfully completed.")
+        
+        # print("Create derived features step successfully completed.")
+        # print("dataset.isnull().sum()")
+        # for col in dataset.columns:
+        #     print(col, dataset[col].isnull().sum())
+        # print("dataset.shape: ", dataset.shape)
+        
+        # print("event_dataset.isnull().sum()")
+        # for col in event_dataset.columns:
+        #     print(col, event_dataset[col].isnull().sum())
+        # print("event_dataset.shape: ", event_dataset.shape)
         
         return dataset, event_dataset
     

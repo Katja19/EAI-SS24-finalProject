@@ -53,7 +53,7 @@ def get_model_and_preprocessing_pipeline(model_type:str, pipeline) -> Tuple[obje
         # else:
         #     raise Exception(f"Error downloading pipeline from WandB artifact URL: {pipeline_url}")
         
-        print("MODEL_TYPE: ", type(model))
+        #print("MODEL_TYPE: ", type(model))
         
     except Exception as e:
         print("Error in get_model_and_preprocessing_pipeline: ", e)

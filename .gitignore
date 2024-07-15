@@ -5,6 +5,8 @@ __pycache__/
 
 # own additions
 wandb/
+fe_katja.ipynb
+temp_katja.ipynb
 
 # C extensions
 *.so

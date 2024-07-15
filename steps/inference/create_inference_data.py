@@ -57,25 +57,21 @@ def get_weather_forecast_24h(first_date: datetime, last_date: datetime) -> pd.Da
 @step 
 def create_inference_data(dataset_hist: pd.DataFrame, event_dataset:pd.DataFrame, lags:int, model_type:str) -> Tuple[pd.DataFrame, str, str]:
     
-    print("Starting create_inference_data step...")
-    print("dataset_hist.columns")
-    print(dataset_hist.columns)
-    
-    # get a dataframe with the next 24 hours weahter forecast data
-    # 1 get the latest timestamp of the pedestrian data in the str format 'YYYY-MM-DDTHH:MM:SS'
+    # Get the latest timestamp of the pedestrian data in the format 'YYYY-MM-DDTHH:MM:SS'
     latest_datetime_wue_data = dataset_hist['timestamp'].max().split('+')[0]
     latest_datetime_wue_data = datetime.strptime(latest_datetime_wue_data, '%Y-%m-%dT%H:%M:%S')
     
-    # 2 calculate first and last date (both inclusive) of the next 24 hours that we want to predict
+    # Calculate the first and last date (both inclusive) of the next 24 hours we want to predict
     first_date = latest_datetime_wue_data + timedelta(hours=1)
     last_date = latest_datetime_wue_data + timedelta(hours=24)
     
-    # 3 get a dataframe with the next 24 hours weahter forecast data
+    # Get a DataFrame with the next 24 hours weather forecast data
     weather_forecast_24h = get_weather_forecast_24h(first_date, last_date)
     
-    # get list of unique values from the column 'location_id'
+    # Get list of unique values from the column 'location_id'
     location_ids = dataset_hist['location_id'].unique()
-    # create thre dataframes for the three locations and add the location_id to the weather_forecast_24h
+    
+    # Create three DataFrames for the three locations and add the location_id to the weather_forecast_24h
     weather_forecast_24h_1 = weather_forecast_24h.copy()
     weather_forecast_24h_1['location_id'] = location_ids[0]
     weather_forecast_24h_2 = weather_forecast_24h.copy()
@@ -83,48 +79,54 @@ def create_inference_data(dataset_hist: pd.DataFrame, event_dataset:pd.DataFrame
     weather_forecast_24h_3 = weather_forecast_24h.copy()
     weather_forecast_24h_3['location_id'] = location_ids[2]
     
-    # merge the three dataframes to one
+    # Merge the three DataFrames into one
     weather_forecast_24h = pd.concat([weather_forecast_24h_1, weather_forecast_24h_2, weather_forecast_24h_3], axis=0)
     
-    print("weather_forecast_24h.columns")
-    print(weather_forecast_24h.columns)
+    # Concatenate dataset_hist and weather_forecast_24h vertically
+    inference_data = pd.concat([dataset_hist, weather_forecast_24h], axis=0)
     
-    # 5 merge die weather_forecast_24h with the dataset_hist on the timestamp column and 
-    # fill the missing values with nan, cause they will be filled during the recursive forecasting with the model
-    #inference_data = pd.merge(dataset_hist, weather_forecast_24h, on=['datetime', 'location_id'], how='outer', axis=0) # vertical concatenation (untereinander)
-    inference_data = pd.concat([dataset_hist, weather_forecast_24h], axis=0) # Vertical concatenation
+    # Extract year, month, day, hour, and weekday from the datetime column and fill NaN values
+    inference_data['year'] = inference_data['year'].fillna(inference_data['datetime'].str[:4].astype(int))
+    inference_data['month'] = inference_data['month'].fillna(inference_data['datetime'].str[5:7].astype(int))
+    inference_data['day'] = inference_data['day'].fillna(inference_data['datetime'].str[8:10].astype(int))
+    inference_data['hour'] = inference_data['hour'].fillna(inference_data['datetime'].str[11:13].astype(int))
+    inference_data['weekday'] = inference_data['weekday'].fillna(pd.to_datetime(inference_data['datetime']).dt.day_name())
     
-    
-    print("inference_data.columns")
-    print(inference_data.columns)
-    
-    # 4 create lag features for the weather data
+    # Create lag features for the weather data
     for lag in range(1, lags+1):
-        inference_data['temp_lag_'+str(lag)] = inference_data['temp'].shift(lag)
-        inference_data['humidity_lag_'+str(lag)] = inference_data['humidity'].shift(lag)
-        inference_data['precip_lag_'+str(lag)] = inference_data['precip'].shift(lag)
+        inference_data[f'temp_lag_{lag}'] = inference_data['temp'].shift(lag)
+        inference_data[f'humidity_lag_{lag}'] = inference_data['humidity'].shift(lag)
+        inference_data[f'precip_lag_{lag}'] = inference_data['precip'].shift(lag)
+        
+    # Create lag features for pedestrians_count
+    for lag in range(1, lags+1):
+        inference_data[f'pedestrians_count_lag_{lag}'] = inference_data['pedestrians_count'].shift(lag)
     
-    # 6 filter the inference_data to get only the rows that are in the next 24 hours
-    first_date_str = first_date.strftime('%Y-%m-%d') + 'T' + first_date.strftime('%H:%M:%S')
-    last_date_str= last_date.strftime('%Y-%m-%dT%H:%M:%S')
-    inference_data = inference_data[(inference_data['datetime'] >= first_date_str) & (inference_data['datetime'] <= last_date_str)]
-    
-    # 7 add event data to the inference data
+    # Create lag and lead features for the event data
+    for lag in range(1, lags+1):
+        event_dataset[f'event_lag_{lag}'] = event_dataset['event'].shift(lag)
+        event_dataset[f'holiday_lag_{lag}'] = event_dataset['holiday'].shift(lag)
+        event_dataset[f'workday_lag_{lag}'] = event_dataset['workday'].shift(lag)
+        
+    for lead in range(1, lags+1):
+        event_dataset[f'event_lead_{lead}'] = event_dataset['event'].shift(-lead)
+        event_dataset[f'holiday_lead_{lead}'] = event_dataset['holiday'].shift(-lead)
+        event_dataset[f'workday_lead_{lead}'] = event_dataset['workday'].shift(-lead)
+        
+    # Merge event data with inference data on the date column
     inference_data = pd.merge(inference_data, event_dataset, on='date', how='left')
     
-    #controll
-    print(inference_data.isnull().sum())
+    # Filter inference_data to get only the rows that are in the next 24 hours
+    first_date_str = first_date.strftime('%Y-%m-%dT%H:%M:%S')
+    last_date_str = last_date.strftime('%Y-%m-%dT%H:%M:%S')
+    inference_data = inference_data[(inference_data['datetime'] >= first_date_str) & (inference_data['datetime'] <= last_date_str)]
     
-    # saving the inference data as an csv file
-    # spit the first_date_str and last_date_str by 'T' and take the first part
-    first_date_day = first_date_str.split('T')[0]
-    first_date_hour = first_date_str.split('T')[1]
-    last_date_day = last_date_str.split('T')[0]
-    last_date_hour = last_date_str.split('T')[1]
-    # get the fist two chars
-    first_date_hour = first_date_hour[:2]
-    last_date_hour = last_date_hour[:2]
+    # drop columns that are not needed
+    # drop all columns that have only NaN values in its columns
+    for column in inference_data.columns:
+        if inference_data[column].isnull().all():
+            inference_data.drop(column, axis=1, inplace=True)
     
-    inference_data.to_csv(f"data/inference_{model_type}_{first_date_day}_{first_date_hour}_to_{last_date_day}_{last_date_hour}.csv", index=False)
-    
+    # Save the inference data as a CSV file
+    inference_data.to_csv("inference_data_original_1.csv", index=False)
     return inference_data, first_date_str, last_date_str

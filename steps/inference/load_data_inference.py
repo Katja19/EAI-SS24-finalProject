@@ -37,5 +37,16 @@ def load_data_inference() -> Tuple[pd.DataFrame, pd.DataFrame]:
     
     # 6. Close the database connection
     connection.close()
+    
+    # print("Data loaded successfully.")
+    # print("data.isnull().sum()")
+    # for col in data.columns:
+    #     print(col, data[col].isnull().sum())
+    # print("data.shape: ", data.shape)
+    
+    # print("event_data.isnull().sum()")
+    # for col in event_data.columns:
+    #     print(col, event_data[col].isnull().sum())
+    # print("event_data.shape: ", event_data.shape)
 
     return data, event_data

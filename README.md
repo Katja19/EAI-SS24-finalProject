@@ -10,6 +10,8 @@ It implements an end-to-end machine learning pipeline to predict the pedestrian 
 
 The data that is used in this repository is retrieved from the<a href="https://opendata.wuerzburg.de/explore/dataset/passantenzaehlung_stundendaten/information/"> open data portal </a>, which provides different data sources about Wuerzburg.
 
+There was further data used for a more detailed look at the weather conditions, historically but more importantly forecast data. The data was retrieved from <a href="https://www.visualcrossing.com/"> visualcrossing</a>. This data in conjunction with data about larger public events and holidays was then fed into the model to predict the amount of future predestrians (next 24 hours).
+
 ### Prerequisites
 Python 3.8 up to 3.11
 

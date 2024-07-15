@@ -76,12 +76,12 @@ def evaluate_model(model:RegressorMixin,
         
         
         #open a file and save the model, if file doest exist it is created automatically
-        with open(f"model.pkl", "wb") as f:
+        with open(f"{run_name}_model.pkl", "wb") as f:
             pickle.dump(model, f)
         
         model_name = run_name + "_model"
         model_artifact = wandb.Artifact(name=model_name, type="model") # create a model artifact
-        model_artifact.add_file("model.pkl")
+        model_artifact.add_file(f"{run_name}_model.pkl")
         wandb.log_artifact(model_artifact) # this will save the model artifact to wandb
         
     # 6. save the fitted pipeline in wandb

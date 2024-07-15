@@ -61,6 +61,7 @@ def create_derived_features(dataset:pd.DataFrame, lags:int) -> Annotated[pd.Data
         dataset.drop('date', axis=1, inplace=True)
         dataset.drop('datetime', axis=1, inplace=True)
         
+        
         #print("Derived features created inside the pipeline.")
         # print(dataset.head())
         #print(dataset.columns)

@@ -1,68 +1,47 @@
 from zenml import pipeline
-from zenml.client import Client
 from steps import update_data
-from steps import create_inference_data
+from steps import load_data_inference, create_derived_features_inference, create_inference_data, get_model_and_preprocessing_pipeline, predictor
 
 @pipeline(enable_cache=False)
-def inference_pipeline(lags:int):
+def inference_pipeline(model_type:str, lags:int):
     """
     Runs the inference pipeline to predict the target variable of the inference data
     """
     
-    # 0. ensue the execution order of the steps
-    create_inference_data.after(update_data)
+    if model_type == 'xgboost':
+        lags = 10
+    elif model_type == 'random_forest':
+        lags = 5
     
+    # 0. ensue the execution order of the steps
+    load_data_inference.after(update_data)
+    create_derived_features_inference.after(load_data_inference)
+    create_inference_data.after(create_derived_features_inference)
+    get_model_and_preprocessing_pipeline.after(create_inference_data)
+    predictor.after(get_model_and_preprocessing_pipeline)
+
     # 1. we update the data in the database using the update_data step from the feature_engineering pipeline
     update_data()
     
-    # 2. we create the inference data for the next 24 hours that we want to predict
-    inference_data = create_inference_data(lags)
+    # 2. we load the data similar to the load_data step from the feature_engineering pipeline,
+    # but this time we dont drop rows with null values, cause we need them for the recursive forecasting
+    dataset_hist, event_dataset = load_data_inference()
     
+    # 3. we create derived features for the inference data using the create_inference_data step
+    dataset_hist, event_dataset  = create_derived_features_inference(dataset_hist, event_dataset, lags) 
     
+    # 4. we create the inference data for the next 24 hours that we want to predict 
+    # Hint: there are nan values in it cause they will be filled during the recursive forecasting with the model
+    inference_data_original, first_date_str, last_date_str = create_inference_data(dataset_hist, event_dataset, lags, model_type)
     
+    # 5. we save the inference data as an csv file
+    #inference_data_original.to_csv(f"data/inference_{model_type}_{first_data_str}_to_{last_data_str}.csv", index=False)
     
+    # 6. get the model and the preprocessing pipeline from wandb
+    model, preprocessing_pipeline = get_model_and_preprocessing_pipeline(model_type)
     
+    # 7. prediction: recursive preprocessing, forcasting an updating the inference data
+    predictor(model, preprocessing_pipeline, inference_data_original, model_type, first_date_str, last_date_str, lags)
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    # # 1 Update_data
-    
-    # #ALT 1. Load the inference data, these are the data points for which we want to predict the target variable
-    # # In our case: The next 24 hours of the time series = the next day
-    # #data = inference_data_loader("./data/inference.csv")
-    
-    # # 2. Get the preprocessing pipeline from the training pipeline
-    # client = Client()
-    # preprocessing_pipeline = client.get_artifact_version("pipeline")
-    
-    # # 3. Preprocess the inference data so that it can be used as input for the model
-    # preprocessed_data = inference_preprocessing(preprocessing_pipeline,data)
-    
-    # # 4. Load the model deployment service, from this we get the deployed model we want to use for inference
-    # model_deployment_service = prediction_service_loader(
-    #     pipeline_name="training_pipeline",
-    #     step_name="mlflow_model_deployer_step",
-    # )
-    
-    # # 5. Use the model deployment service to make predictions on the preprocessed data, here we save the predictions as an artifact
-    # prediction = predictor(service=model_deployment_service, input_data=preprocessed_data)
+    # 8. plot the predictions using the csv file with the predictions
+    # no, we will not implement this step in the main notebook, cause it is not necessary for the main goal of the project

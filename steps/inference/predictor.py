@@ -155,11 +155,15 @@ def predictor(preprocessing_pipeline,
     last_date_day = last_date_str.split('T')[0]
     last_date_time = last_date_str.split('T')[1]
     
-    output_path = f"data/inference_{model_type}_{first_date_day}_{first_date_time}_to_{last_date_day}_{last_date_time}_with_predictions.csv"
-    # change alls : to - in the output_path
-    output_path = output_path.replace(':', '-')
-    inference_data_original.to_csv(output_path, index=False)
-    print(f"Predictions saved to {output_path}")
+    # output_path = f"data/inference_{model_type}_{first_date_day}_{first_date_time}_to_{last_date_day}_{last_date_time}_with_predictions.csv"
+    # # change alls : to - in the output_path
+    # output_path = output_path.replace(':', '-')
+    # inference_data_original.to_csv(output_path, index=False)
+    # print(f"Predictions saved to {output_path}")
+    
+    # save dataframe inference_data_original to a csv file
+    inference_data_original.to_csv("predictions.csv", index=False)
+    print("Predictions saved to predictions.csv")
 
 
 
